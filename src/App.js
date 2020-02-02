@@ -1,26 +1,43 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react';
+import { Switch, Route } from 'react-router-dom';
+import Calendar from './components/Calendar';
+import LogIn from './components/LogIn'
+const API = 'http://localhost:3000/api/v1/users/1';
+class App extends Component {
+  state = {
+    user: {},
+    plants: []
+  };
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+ 
+  async componentDidMount() {
+    const response = await fetch(API);
+    const json = await response.json();
+    const user = json.data.attributes;
+    const plants = json.included.map(data => data.attributes);
+    this.setState({ user, plants });
+  }
+
+  render() {
+    
+    return (
+      <div>
+        <Switch>
+          <Route
+            exact
+            path='/login'
+            render={() => <LogIn />}
+          />
+          <Route
+          exact
+          path='/calendar'
+          render={() => <Calendar plants={this.state.plants} />}
+        />
+
+        </Switch>
+      </div>
+    );
+  }
 }
 
 export default App;
