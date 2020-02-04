@@ -1,11 +1,6 @@
 import React, { Component } from 'react';
 import { Switch, Route, withRouter } from 'react-router-dom';
-import Calendar from './components/Calendar';
-import LogIn from './components/LogIn';
-import NavBar from './components/NavBar';
-import SignUp from './components/SignUp';
-import ProtectedRoute from './components/ProtectedRoute';
-import { tr } from 'date-fns/locale';
+import { Calendar, Login, NavBar, ProtectedRoute, SignUp } from './components';
 const API = 'http://localhost:3000/api/v1/profile';
 class App extends Component {
   state = {
@@ -62,7 +57,7 @@ class App extends Component {
         <Switch>
           <Route
             path='/login'
-            render={() => <LogIn setUser={this.setUser} />}
+            render={() => <Login setUser={this.setUser} />}
           />
           <Route
             path='/signup'

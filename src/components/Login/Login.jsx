@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import { withRouter, Link } from 'react-router-dom';
-
 import './login.scss';
 const API = 'http://localhost:3000/api/v1/login';
 
-class LogIn extends Component {
+class Login extends Component {
   state = {
     username: '',
     password: ''
@@ -68,11 +67,11 @@ class LogIn extends Component {
           <button type='submit' value='Submit'>
             Log In
           </button>
-          <Link to={'/signup'}>Have an account?</Link>
+          <Link to={'/signup'}>Need an account?</Link>
         </form>
       </div>
     );
   }
 }
 
-export default withRouter(LogIn);
+export default withRouter(Login);
