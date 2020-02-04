@@ -1,0 +1,22 @@
+@import '~@fullcalendar/core/main.css';
+@import '~@fullcalendar/daygrid/main.css';
+
+
+.calendar-container {
+  font-size: 14px;
+}
+
+h2 {
+  color: #e2703e;
+}
+
+.calendar {
+  margin: 3em 10em;
+  max-width: 900px;
+}
+
+.fc-content {
+  text-align: left;
+  font-size: 10px;
+  padding: 2px;
+}

@@ -4,7 +4,8 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { addDays } from 'date-fns';
-import '../main.scss';
+import './calendar.scss';
+
 
 class Calendar extends Component {
   createWaterDatesForAllPlants = () => {
@@ -34,6 +35,7 @@ class Calendar extends Component {
   };
 
   render() {
+    console.log(this.props)
     return (
       <div className='calendar-container'>
         <div className='calendar'>
@@ -52,4 +54,5 @@ class Calendar extends Component {
   }
 }
 
+// events={this.createWaterDatesForAllPlants().flat()}
 export default Calendar;
