@@ -7,12 +7,11 @@ const API = 'http://localhost:3000/api/v1/login';
 class LogIn extends Component {
   state = {
     username: '',
-    password: '',
-    errors: {}
+    password: ''
   };
 
   handleChange = e => {
-    this.setState({ [e.target.name]: e.target.value, errors: '' });
+    this.setState({ [e.target.name]: e.target.value });
   };
 
   handleSubmit = async e => {
@@ -35,8 +34,6 @@ class LogIn extends Component {
         this.props.setUser(json);
         localStorage.setItem('token', json.jwt);
         this.props.history.push('/calendar');
-      } else {
-        this.setState({ errors: json.errors, username: '', password: '' });
       }
     } catch (error) {
       console.error(error);
@@ -44,39 +41,35 @@ class LogIn extends Component {
   };
 
   render() {
-    const { username, password, errors } = this.state;
+    const { username, password } = this.state;
     return (
-      <div className='login-form'>
+      <div className='login-container'>
         <form onSubmit={this.handleSubmit}>
           <label>
             Username
             <input
+              required
               onChange={this.handleChange}
               type='text'
               name='username'
               value={username}
             />
           </label>
-          {errors.username && !username ? (
-            <div>Username {errors.username[0]}</div>
-          ) : null}
           <label>
             Password
             <input
+              required
               onChange={this.handleChange}
               type='password'
               name='password'
-              value={this.state.password}
+              value={password}
             />
           </label>
-          {errors.password && !password ? (
-            <div>Password {errors.password[0]}</div>
-          ) : null}
           <button type='submit' value='Submit'>
-            Sign Up
+            Log In
           </button>
+          <Link to={'/signup'}>Have an account?</Link>
         </form>
-        <Link to={'/signup'}>Need an account?</Link>
       </div>
     );
   }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import './login.scss';
 const API = 'http://localhost:3000/api/v1/users';
 
@@ -45,7 +45,7 @@ class SignUp extends Component {
   render() {
     const { username, password, errors } = this.state;
     return (
-      <div className='login-form'>
+      <div className='login-container'>
         <form onSubmit={this.handleSubmit}>
           <label>
             Username
@@ -74,6 +74,7 @@ class SignUp extends Component {
           <button type='submit' value='Submit'>
             Sign Up
           </button>
+          <Link to={'/login'}>Need an account?</Link>
         </form>
       </div>
     );
