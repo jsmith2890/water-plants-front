@@ -1,6 +1,13 @@
 import React, { Component } from 'react';
-import { Switch, Route, withRouter } from 'react-router-dom';
-import { Calendar, Login, NavBar, ProtectedRoute, SignUp } from './components';
+import { Switch, Route, withRouter} from 'react-router-dom';
+import {
+  Calendar,
+  Login,
+  NavBar,
+  ProtectedRoute,
+  SignUp,
+  PlantForm
+} from './components';
 const API = 'http://localhost:3000/api/v1/profile';
 class App extends Component {
   state = {
@@ -10,30 +17,12 @@ class App extends Component {
     isLoading: true
   };
 
-  componentDidMount() {
-    const token = localStorage.getItem('token');
-    if (token) this.fetchCurrentUser(token);
-  }
-
-  fetchCurrentUser = async token => {
-    try {
-      const response = await fetch(API, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
-        }
-      });
-      const json = await response.json();
-
-      this.setUser(json);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   setUser = json => {
-    const user = json.user.data.attributes;
+    const user = {
+      id: json.user.data.id,
+      username: json.user.data.attributes.username
+    };
+    console.log(json);
     const plants = json.user.included.map(data => data.attributes);
     this.setState({ user, plants, loggedIn: true, isLoading: false });
   };
@@ -50,7 +39,7 @@ class App extends Component {
   };
 
   render() {
-    const { loggedIn, plants, isLoading } = this.state;
+    const { loggedIn, plants, isLoading, user } = this.state;
     return (
       <div>
         {loggedIn ? <NavBar logOut={this.logOut} /> : null}
@@ -59,16 +48,21 @@ class App extends Component {
             path='/login'
             render={() => <Login setUser={this.setUser} />}
           />
-          <Route
-            path='/signup'
-            render={() => <SignUp setUser={this.setUser} />}
-          />
+          <Route path='/signup' render={() => <SignUp />} />
           <ProtectedRoute
             loggedIn={loggedIn}
             isLoading={isLoading}
             path={'/calendar'}
             plants={plants}
+            setUser={this.setUser}
             component={Calendar}
+          />
+          <ProtectedRoute
+            loggedIn={loggedIn}
+            isLoading={isLoading}
+            path={'/plant/new'}
+            user={user}
+            component={PlantForm}
           />
         </Switch>
       </div>

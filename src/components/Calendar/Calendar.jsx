@@ -4,6 +4,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { addDays } from 'date-fns';
+import  WithAuth from '../withAuth'
 import './calendar.scss';
 
 
@@ -14,35 +15,33 @@ class Calendar extends Component {
   };
 
   createWaterDates = plant => {
-    console.log(plant);
-    let startDate = new Date('Dec 16, 2019');
-    const endDate = new Date('March 9, 2020');
+    console.log(new Date(plant.firstWatered));
+    let firstWatered = new Date(plant.firstWatered);
+    const endDate = new Date('December 31, 2020');
     const daysToWaterPlant = [];
-    const daysBetweenWatering = parseInt(plant.daysBetweenWatering);
+    const daysBetweenWatering = parseInt(plant.waterFrequency);
 
-    while (endDate.getTime() > startDate.getTime()) {
-      let waterDate = addDays(startDate, daysBetweenWatering);
+    while (endDate.getTime() > firstWatered.getTime()) {
+      let nextWaterDate = addDays(firstWatered, daysBetweenWatering);
 
       daysToWaterPlant.push({
-        title: plant.name,
-        start: startDate,
+        title: plant.nickName,
+        start: firstWatered,
         allDay: true //for calendar library use
       });
 
-      startDate = waterDate;
+      firstWatered = nextWaterDate;
     }
     return daysToWaterPlant;
   };
 
   render() {
-    console.log(this.props)
     return (
       <div className='calendar-container'>
         <div className='calendar'>
           <FullCalendar
             defaultView='dayGridMonth'
             aspectRatio={1.75}
-            weekends={false}
             events={this.createWaterDatesForAllPlants().flat()}
             eventLimit={4}
             eventColor={'#3B5A37'}
@@ -55,4 +54,4 @@ class Calendar extends Component {
 }
 
 // events={this.createWaterDatesForAllPlants().flat()}
-export default Calendar;
+export default WithAuth(Calendar);
