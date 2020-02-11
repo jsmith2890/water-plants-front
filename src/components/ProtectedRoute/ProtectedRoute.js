@@ -8,15 +8,17 @@ const ProtectedRoute = ({
   path,
   ...rest
 }) => {
+  console.log(loggedIn, 'ifda')
   return (
     <Route
       {...rest}
       render={props =>
-        loggedIn || isLoading ? (
+        loggedIn ? (
           <Comp {...props} {...rest} />
         ) : (
           <Redirect
-            to={{ pathname: '/login', state: { from: props.location } }}
+            // to={{ pathname: '/login', state: { from: props.location } }}
+            push to='/login'
           />
         )
       }

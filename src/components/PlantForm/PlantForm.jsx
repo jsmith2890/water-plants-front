@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
+import WithAuth from '../withAuth';
 
-const API = 'http://localhost:3000/api/v1/plants';
+// const API = 'http://localhost:3000/api/v1/plants';
+const API = 'https://water-plants.herokuapp.com/api/v1/plants';
 
 class PlantForm extends Component {
   state = {
@@ -24,7 +26,8 @@ class PlantForm extends Component {
       water_frequency,
       first_watered
     } = this.state;
-    const token = localStorage.getItem('token')
+
+    const token = localStorage.getItem('token');
     const reqObj = {
       method: 'POST',
       headers: {
@@ -45,21 +48,10 @@ class PlantForm extends Component {
     try {
       const response = await fetch(API, reqObj);
       const json = await response.json();
-      this.restForm()
-      this.props.history.push('/calendar')
     } catch (error) {
       console.error(error);
     }
   };
-
-  restForm() {
-    this.setState({
-      nick_name: '',
-      plant_type: '',
-      water_frequency: '',
-      first_watered: ''
-    });
-  }
 
   render() {
     const {
@@ -99,7 +91,7 @@ class PlantForm extends Component {
             />
           </label>
           <label>
-            First Watered 
+            First Watered
             <input
               onChange={this.handleChange}
               type='input'
@@ -116,4 +108,4 @@ class PlantForm extends Component {
   }
 }
 
-export default withRouter(PlantForm);
+export default WithAuth(withRouter(PlantForm));
