@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { withRouter, Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import {
   Avatar,
   Button,
@@ -14,18 +14,18 @@ import {
 } from '@material-ui/core/';
 
 import { withStyles } from '@material-ui/core/styles';
-// const API = 'http://localhost:3000/api/v1/login';
-const API = 'https://water-plants.herokuapp.com/api/v1/login';
+// const API = 'http://localhost:3000/api/v1/users';
+const API = 'https://water-plants.herokuapp.com/api/v1/users';
 
 const styles = theme => ({
   root: {
     height: '100vh'
   },
   image: {
-    backgroundImage: 'url(/background.jpg)',
+    backgroundImage: 'url(https://source.unsplash.com/random)',
     backgroundRepeat: 'no-repeat',
     backgroundColor:
-      theme.palette.type === 'light'
+      theme.palette.type === 'dark'
         ? theme.palette.grey[900]
         : theme.palette.grey[50],
     backgroundSize: 'cover',
@@ -46,24 +46,22 @@ const styles = theme => ({
     marginTop: theme.spacing(1)
   },
   submit: {
-    margin: theme.spacing(3, 0, 2),
-    backgroundColor: '#3B5A37'
+    margin: theme.spacing(3, 0, 2)
   }
 });
 
-class Login extends Component {
+class SignUp extends Component {
   state = {
     username: '',
-    password: ''
+    password: '',
+    errors: {}
   };
 
   handleChange = e => {
-    console.log('hi')
-    this.setState({ [e.target.name]: e.target.value });
+    this.setState({ [e.target.name]: e.target.value, errors: '' });
   };
 
   handleSubmit = async e => {
-    console.log('here')
     e.preventDefault();
     const user = this.state;
     const reqObj = {
@@ -82,16 +80,57 @@ class Login extends Component {
         this.props.setUser(json);
         localStorage.setItem('token', json.jwt);
         this.props.history.push('/calendar');
+      } else {
+        this.setState({ errors: json.errors, username: '', password: '' });
       }
-      if (json.alert(json.error));
     } catch (error) {
       console.error(error);
     }
   };
 
+  //   render() {
+  //     const { username, password, errors } = this.state;
+  //     return (
+  //       <div className='sign-up-container'>
+  //         <form onSubmit={this.handleSubmit}>
+  //           <label>
+  //             Username
+  //             <input
+  //               onChange={this.handleChange}
+  //               type='text'
+  //               name='username'
+  //               value={username}
+  //             />
+  //           </label>
+  //           {errors.username && !username ? (
+  //             <div>Username {errors.username[0]}</div>
+  //           ) : null}
+  //           <label>
+  //             Password
+  //             <input
+  //               onChange={this.handleChange}
+  //               type='password'
+  //               name='password'
+  //               value={this.state.password}
+  //             />
+  //           </label>
+  //           {errors.password && !password ? (
+  //             <div>Password {errors.password[0]}</div>
+  //           ) : null}
+  //           <button type='submit' value='Submit'>
+  //             Sign Up
+  //           </button>
+  //           <Link to={'/login'}>Have an account?</Link>
+  //         </form>
+  //       </div>
+  //     );
+  //   }
+  // }
+
+  // export default withRouter(SignUp);
+
   render() {
     const { classes } = this.props;
-    const { username, password } = this.state;
     return (
       <Grid container component='main' className={classes.root}>
         <CssBaseline />
@@ -102,19 +141,17 @@ class Login extends Component {
             <Typography component='h1' variant='h5'>
               Sign in
             </Typography>
-            <form className={classes.form} noValidate onSubmit={this.handleSubmit}>
+            <form className={classes.form} noValidate>
               <TextField
                 variant='outlined'
                 margin='normal'
                 required
                 fullWidth
                 id='email'
-                label='Username'
-                name='username'
-                autoComplete='username'
+                label='Email Address'
+                name='email'
+                autoComplete='email'
                 autoFocus
-                onChange={this.handleChange}
-                value={username}
               />
               <TextField
                 variant='outlined'
@@ -126,8 +163,10 @@ class Login extends Component {
                 type='password'
                 id='password'
                 autoComplete='current-password'
-                onChange={this.handleChange}
-                value={password}
+              />
+              <FormControlLabel
+                control={<Checkbox value='remember' color='primary' />}
+                label='Remember me'
               />
               <Button
                 type='submit'
@@ -155,4 +194,4 @@ class Login extends Component {
   }
 }
 
-export default withRouter(withStyles(styles)(Login));
+export default withRouter(withStyles(styles)(SignUp));

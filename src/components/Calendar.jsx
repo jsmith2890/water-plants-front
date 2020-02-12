@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { addDays } from 'date-fns';
-import  WithAuth from '../withAuth'
-import './calendar.scss';
-
+import WithAuth from './withAuth';
+import '../main.scss';
 
 class Calendar extends Component {
   createWaterDatesForAllPlants = () => {
@@ -17,7 +17,7 @@ class Calendar extends Component {
   createWaterDates = plant => {
     console.log(new Date(plant.firstWatered));
     let firstWatered = new Date(plant.firstWatered);
-    const endDate = new Date('December 31, 2020');
+    const endDate = new Date('December 31, 2020'); // needs to be dynamic
     const daysToWaterPlant = [];
     const daysBetweenWatering = parseInt(plant.waterFrequency);
 
@@ -54,7 +54,4 @@ class Calendar extends Component {
 }
 
 // events={this.createWaterDatesForAllPlants().flat()}
-export default WithAuth(Calendar);
-
-
-
+export default withRouter(WithAuth(Calendar));

@@ -1,32 +1,29 @@
 import React, { Component } from 'react';
-import { Link, withRouter } from 'react-router-dom';
-import './signup.scss';
+import { withRouter, Link } from 'react-router-dom';
+import { withStyles } from '@material-ui/core/styles';
 import {
   Avatar,
   Button,
   CssBaseline,
   TextField,
-  FormControlLabel,
-  Checkbox,
   Paper,
   Box,
   Grid,
   Typography
 } from '@material-ui/core/';
 
-import { withStyles } from '@material-ui/core/styles';
-// const API = 'http://localhost:3000/api/v1/users';
-const API = 'https://water-plants.herokuapp.com/api/v1/users';
+// const API = 'http://localhost:3000/api/v1/login';
+const API = 'https://water-plants.herokuapp.com/api/v1/login';
 
 const styles = theme => ({
   root: {
     height: '100vh'
   },
   image: {
-    backgroundImage: 'url(https://source.unsplash.com/random)',
+    backgroundImage: 'url(/background.jpg)',
     backgroundRepeat: 'no-repeat',
     backgroundColor:
-      theme.palette.type === 'dark'
+      theme.palette.type === 'light'
         ? theme.palette.grey[900]
         : theme.palette.grey[50],
     backgroundSize: 'cover',
@@ -51,15 +48,14 @@ const styles = theme => ({
   }
 });
 
-class SignUp extends Component {
+class Login extends Component {
   state = {
     username: '',
-    password: '',
-    errors: {}
+    password: ''
   };
 
   handleChange = e => {
-    this.setState({ [e.target.name]: e.target.value, errors: '' });
+    this.setState({ [e.target.name]: e.target.value });
   };
 
   handleSubmit = async e => {
@@ -81,57 +77,16 @@ class SignUp extends Component {
         this.props.setUser(json);
         localStorage.setItem('token', json.jwt);
         this.props.history.push('/calendar');
-      } else {
-        this.setState({ errors: json.errors, username: '', password: '' });
       }
+      if (json.error) json.alert(json.error);
     } catch (error) {
       console.error(error);
     }
   };
 
-  //   render() {
-  //     const { username, password, errors } = this.state;
-  //     return (
-  //       <div className='sign-up-container'>
-  //         <form onSubmit={this.handleSubmit}>
-  //           <label>
-  //             Username
-  //             <input
-  //               onChange={this.handleChange}
-  //               type='text'
-  //               name='username'
-  //               value={username}
-  //             />
-  //           </label>
-  //           {errors.username && !username ? (
-  //             <div>Username {errors.username[0]}</div>
-  //           ) : null}
-  //           <label>
-  //             Password
-  //             <input
-  //               onChange={this.handleChange}
-  //               type='password'
-  //               name='password'
-  //               value={this.state.password}
-  //             />
-  //           </label>
-  //           {errors.password && !password ? (
-  //             <div>Password {errors.password[0]}</div>
-  //           ) : null}
-  //           <button type='submit' value='Submit'>
-  //             Sign Up
-  //           </button>
-  //           <Link to={'/login'}>Have an account?</Link>
-  //         </form>
-  //       </div>
-  //     );
-  //   }
-  // }
-
-  // export default withRouter(SignUp);
-
   render() {
     const { classes } = this.props;
+    const { username, password } = this.state;
     return (
       <Grid container component='main' className={classes.root}>
         <CssBaseline />
@@ -142,17 +97,23 @@ class SignUp extends Component {
             <Typography component='h1' variant='h5'>
               Sign in
             </Typography>
-            <form className={classes.form} noValidate>
+            <form
+              className={classes.form}
+              noValidate
+              onSubmit={this.handleSubmit}
+            >
               <TextField
                 variant='outlined'
                 margin='normal'
                 required
                 fullWidth
                 id='email'
-                label='Email Address'
-                name='email'
-                autoComplete='email'
+                label='Username'
+                name='username'
+                autoComplete='username'
                 autoFocus
+                onChange={this.handleChange}
+                value={username}
               />
               <TextField
                 variant='outlined'
@@ -164,10 +125,8 @@ class SignUp extends Component {
                 type='password'
                 id='password'
                 autoComplete='current-password'
-              />
-              <FormControlLabel
-                control={<Checkbox value='remember' color='primary' />}
-                label='Remember me'
+                onChange={this.handleChange}
+                value={password}
               />
               <Button
                 type='submit'
@@ -181,7 +140,7 @@ class SignUp extends Component {
               <Grid container>
                 <Grid item xs></Grid>
                 <Grid item>
-                  <Link href='#' variant='body2'>
+                  <Link to={'/signup'} variant='body2'>
                     {"Don't have an account? Sign Up"}
                   </Link>
                 </Grid>
@@ -195,4 +154,4 @@ class SignUp extends Component {
   }
 }
 
-export default withRouter(withStyles(styles)(SignUp));
+export default withRouter(withStyles(styles)(Login));

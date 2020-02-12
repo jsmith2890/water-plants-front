@@ -34,17 +34,19 @@ class App extends Component {
       loggedIn: false,
       isLoading: true
     });
-    this.props.history.push('/login');
+    this.props.history.push('/');
   };
 
   render() {
     const { loggedIn, plants, isLoading, user } = this.state;
+    console.log('here', this.props.history);
     return (
       <div>
         {loggedIn ? <NavBar logOut={this.logOut} /> : null}
         <Switch>
           <Route
-            path='/login'
+            exact
+            path='/'
             render={() => <Login setUser={this.setUser} />}
           />
           <Route
@@ -52,18 +54,15 @@ class App extends Component {
             render={() => <SignUp setUser={this.setUser} />}
           />
           <Calendar
-            loggedIn={loggedIn}
-            isLoading={isLoading}
             path={'/calendar'}
             plants={plants}
             setUser={this.setUser}
             component={Calendar}
           />
-          <ProtectedRoute
-            loggedIn={loggedIn}
-            isLoading={isLoading}
-            path={'/plant/new'}
+          <PlantForm
+            path={'/plants/new'}
             user={user}
+            setUser={this.setUser}
             component={PlantForm}
           />
         </Switch>
