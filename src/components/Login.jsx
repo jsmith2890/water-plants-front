@@ -20,7 +20,7 @@ const styles = theme => ({
     height: '100vh'
   },
   image: {
-    backgroundImage: 'url(/background.jpg)',
+    backgroundImage: 'url(/login.jpg)',
     backgroundRepeat: 'no-repeat',
     backgroundColor:
       theme.palette.type === 'light'

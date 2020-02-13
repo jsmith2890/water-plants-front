@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import WithAuth from './withAuth';
-import { TextField, Button, Grid } from '@material-ui/core/';
+import withAuth from './withAuth';
 import DateFnsUtils from '@date-io/date-fns';
+import { withStyles } from '@material-ui/core/styles';
+import { TextField, Button, Grid, Container } from '@material-ui/core/';
 import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker
@@ -10,6 +11,22 @@ import {
 
 // const API = 'http://localhost:3000/api/v1/plants';
 const API = 'https://water-plants.herokuapp.com/api/v1/plants';
+
+const styles = theme => ({
+  root: {
+    height: '100vh'
+  },
+  container: {
+    topPadding: '15rem'
+  },
+  paper: {
+    marginTop: theme.spacing(8),
+  },
+  // button: {
+  //   width: 150,
+  //   height: 50
+  // }
+});
 
 class PlantForm extends Component {
   state = {
@@ -24,7 +41,7 @@ class PlantForm extends Component {
     this.setState({ [e.target.name]: e.target.value });
   };
 
-  handleDate = date => {
+  handleDateChange = date => {
     this.setState({ first_watered: date });
   };
 
@@ -65,75 +82,97 @@ class PlantForm extends Component {
   };
 
   render() {
+    const { classes } = this.props;
     const {
       nick_name,
       plant_type,
       water_frequency,
       first_watered
     } = this.state;
-    return (
-      <Grid container direction='column' justify='center' alignItems='center'>
-        <form onSubmit={this.handleSubmit}>
-          <TextField
-            id='outlined-secondary'
-            label='Plant Type'
-            variant='outlined'
-            color='secondary'
-            onChange={this.handleChange}
-            name='plant_type'
-            value={plant_type}
-          />
-          <TextField
-            id='outlined-secondary'
-            label='Plant Nickname'
-            variant='outlined'
-            color='secondary'
-            onChange={this.handleChange}
-            name='nick_name'
-            value={nick_name}
-          />
-          <TextField
-            id='standard-number'
-            type='number'
-            InputLabelProps={{
-              shrink: true
-            }}
-            label='Water Frequency'
-            variant='outlined'
-            color='secondary'
-            onChange={this.handleChange}
-            name='water_frequency'
-            value={water_frequency}
-          />
 
-          <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <KeyboardDatePicker
-              disableToolbar
-              variant='inline'
-              format='MM/dd/yyyy'
-              margin='normal'
-              id='date-picker-inline'
-              label='Date picker inline'
-              onChange={this.handleDate}
-              value={first_watered}
-              name='first_watered'
-              KeyboardButtonProps={{
-                'aria-label': 'change date'
-              }}
-            />
-          </MuiPickersUtilsProvider>
-          <Button
-            variant='contained'
-            color='primary'
-            type='submit'
-            value='Submit'
-          >
-            Add Plant
-          </Button>
-        </form>
-      </Grid>
+    return (
+      <Container component='main' maxWidth='s' className={classes.container}>
+        <div className={classes.paper}>
+          <form onSubmit={this.handleSubmit}>
+            <Grid
+              container
+              direction='column'
+              spacing={2}
+              justify='space-evenly'
+              alignItems='center'
+            >
+              <Grid item xs={12}>
+                <TextField
+                  id='outlined-secondary'
+                  label='Plant Type'
+                  variant='outlined'
+                  color='secondary'
+                  onChange={this.handleChange}
+                  name='plant_type'
+                  value={plant_type}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  id='outlined-secondary'
+                  label='Plant Nickname'
+                  variant='outlined'
+                  color='secondary'
+                  onChange={this.handleChange}
+                  name='nick_name'
+                  value={nick_name}
+                />
+              </Grid>
+              <Grid item>
+                <TextField
+                  id='standard-number'
+                  type='number'
+                  InputLabelProps={{
+                    shrink: true
+                  }}
+                  label='Water Frequency in days'
+                  variant='outlined'
+                  color='secondary'
+                  onChange={this.handleChange}
+                  name='water_frequency'
+                  value={water_frequency}
+                />
+              </Grid>
+              <Grid item>
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                  <KeyboardDatePicker
+                    disableToolbar
+                    variant='inline'
+                    format='MM/dd/yyyy'
+                    margin='normal'
+                    id='date-picker-inline'
+                    label='Date picker inline'
+                    onChange={this.handleDateChange}
+                    value={first_watered}
+                    name='first_watered'
+                    KeyboardButtonProps={{
+                      'aria-label': 'change date'
+                    }}
+                  />
+                </MuiPickersUtilsProvider>
+              </Grid>
+              <Grid item>
+                <Button
+                  className={classes.button}
+                  variant='contained'
+                  color='primary'
+                  type='submit'
+                  value='Submit'
+                >
+                  Add Plant
+                </Button>
+              </Grid>
+            </Grid>
+          </form>
+        </div>
+      </Container>
     );
   }
 }
 
-export default WithAuth(withRouter(PlantForm));
+export default withAuth(withRouter(withStyles(styles)(PlantForm)));

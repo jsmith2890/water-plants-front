@@ -15,7 +15,6 @@ class Calendar extends Component {
   };
 
   createWaterDates = plant => {
-    console.log(new Date(plant.firstWatered));
     let firstWatered = new Date(plant.firstWatered);
     const endDate = new Date('December 31, 2020'); // needs to be dynamic
     const daysToWaterPlant = [];

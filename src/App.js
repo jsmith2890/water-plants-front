@@ -39,7 +39,6 @@ class App extends Component {
 
   render() {
     const { loggedIn, plants, isLoading, user } = this.state;
-    console.log('here', this.props.history);
     return (
       <div>
         {loggedIn ? <NavBar logOut={this.logOut} /> : null}
